@@ -1,12 +1,12 @@
 services:
   web:
-    image: mcr.microsoft.com/dotnet/sdk:8.0
+    image: mcr.microsoft.com/dotnet/sdk
     volumes:
       - .:/app
     ports:
-      - "5154:5154"
-    working_dir: /app/WebProject
-    command: dotnet watch run
+      - "5144:5144"
+    working_dir: /app/SideProject
+    command: dotnet watch run --urls=http://0.0.0.0:5144
     depends_on:
       - db
   db:
@@ -16,7 +16,6 @@ services:
       POSTGRES_PASSWORD: 123
       POSTGRES_DB: aleks_db
     ports:
-      - "5432:5432"
+      - "5132:5132"
     working_dir: /app/WebProject
-#test
       
