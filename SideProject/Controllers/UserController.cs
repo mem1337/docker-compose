@@ -7,6 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SideProject.Models;
 
+public class UserDto
+{
+    public long UserId { get; set; }
+    public string? Username { get; set; }
+    public string? PasswordHash { get; set; }
+    public Role Role { get; set; }
+}
+
 namespace SideProject.Controllers
 {
     [Route("api/[controller]")]
@@ -28,7 +36,8 @@ namespace SideProject.Controllers
         }
 
         // GET: api/User/5
-        [HttpGet("{id}")]
+        //[HttpGet("{id}")]
+        [HttpGet("api/User/{id}")]
         public async Task<ActionResult<User>> GetUser(long id)
         {
             var user = await _context.Users.FindAsync(id);
@@ -38,7 +47,15 @@ namespace SideProject.Controllers
                 return NotFound();
             }
 
-            return user;
+            var userDto = new UserDto
+            {
+                UserId = user.UserId,
+                Username = user.Username,
+                PasswordHash = user.PasswordHash,
+                Role = user.Role
+            };
+
+            return Ok(userDto);
         }
 
         // PUT: api/User/5

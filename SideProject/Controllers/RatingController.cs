@@ -77,10 +77,17 @@ namespace SideProject.Controllers
         [HttpPost]
         public async Task<ActionResult<Rating>> PostRating(Rating rating)
         {
-            _context.Ratings.Add(rating);
-            await _context.SaveChangesAsync();
+            if (rating.UserRating <= 5 && rating.UserRating >= 1)
+            {
+                _context.Ratings.Add(rating);
+                await _context.SaveChangesAsync();
+                return CreatedAtAction("GetRating", new { id = rating.RatingId }, rating);
+            }
+            else
+            {
+                return BadRequest();
+            }
 
-            return CreatedAtAction("GetRating", new { id = rating.RatingId }, rating);
         }
 
         // DELETE: api/Rating/5
