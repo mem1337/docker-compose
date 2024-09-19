@@ -11,47 +11,47 @@ namespace SideProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class FavoriteController : ControllerBase
     {
-        private readonly UserContext _context;
+        private readonly FavoriteContext _context;
 
-        public UserController(UserContext context)
+        public FavoriteController(FavoriteContext context)
         {
             _context = context;
         }
 
-        // GET: api/User
+        // GET: api/Favorite
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<Favorite>>> GetFavorites()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Favorites.ToListAsync();
         }
 
-        // GET: api/User/5
+        // GET: api/Favorite/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(long id)
+        public async Task<ActionResult<Favorite>> GetFavorite(long id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var favorite = await _context.Favorites.FindAsync(id);
 
-            if (user == null)
+            if (favorite == null)
             {
                 return NotFound();
             }
 
-            return user;
+            return favorite;
         }
 
-        // PUT: api/User/5
+        // PUT: api/Favorite/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(long id, User user)
+        public async Task<IActionResult> PutFavorite(long id, Favorite favorite)
         {
-            if (id != user.UserId)
+            if (id != favorite.FavId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            _context.Entry(favorite).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +59,7 @@ namespace SideProject.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
+                if (!FavoriteExists(id))
                 {
                     return NotFound();
                 }
@@ -72,46 +72,36 @@ namespace SideProject.Controllers
             return NoContent();
         }
 
-        // POST: api/User
+        // POST: api/Favorite
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-
-        public class RatingDto
-        {
-            public int MovieId { get; set; }
-            public int Rating { get; set; }
-        }
-
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<Favorite>> PostFavorite(Favorite favorite)
         {
-            _context.Users.Add(user);
+            _context.Favorites.Add(favorite);
             await _context.SaveChangesAsync();
 
-            //return CreatedAtAction("GetUser", new { id = user.UserId }, user);
-            return CreatedAtAction(nameof(GetUser), new { id = user.UserId }, user);
+            return CreatedAtAction("GetFavorite", new { id = favorite.FavId }, favorite);
         }
 
-
-
-        // DELETE: api/User/5
+        // DELETE: api/Favorite/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(long id)
+        public async Task<IActionResult> DeleteFavorite(long id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            var favorite = await _context.Favorites.FindAsync(id);
+            if (favorite == null)
             {
                 return NotFound();
             }
 
-            _context.Users.Remove(user);
+            _context.Favorites.Remove(favorite);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool UserExists(long id)
+        private bool FavoriteExists(long id)
         {
-            return _context.Users.Any(e => e.UserId == id);
+            return _context.Favorites.Any(e => e.FavId == id);
         }
     }
 }

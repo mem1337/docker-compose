@@ -11,47 +11,47 @@ namespace SideProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class RatingController : ControllerBase
     {
-        private readonly UserContext _context;
+        private readonly RatingContext _context;
 
-        public UserController(UserContext context)
+        public RatingController(RatingContext context)
         {
             _context = context;
         }
 
-        // GET: api/User
+        // GET: api/Rating
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<Rating>>> GetRatings()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Ratings.ToListAsync();
         }
 
-        // GET: api/User/5
+        // GET: api/Rating/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(long id)
+        public async Task<ActionResult<Rating>> GetRating(long id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var rating = await _context.Ratings.FindAsync(id);
 
-            if (user == null)
+            if (rating == null)
             {
                 return NotFound();
             }
 
-            return user;
+            return rating;
         }
 
-        // PUT: api/User/5
+        // PUT: api/Rating/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(long id, User user)
+        public async Task<IActionResult> PutRating(long id, Rating rating)
         {
-            if (id != user.UserId)
+            if (id != rating.RatingId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            _context.Entry(rating).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +59,7 @@ namespace SideProject.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
+                if (!RatingExists(id))
                 {
                     return NotFound();
                 }
@@ -72,46 +72,36 @@ namespace SideProject.Controllers
             return NoContent();
         }
 
-        // POST: api/User
+        // POST: api/Rating
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-
-        public class RatingDto
-        {
-            public int MovieId { get; set; }
-            public int Rating { get; set; }
-        }
-
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<Rating>> PostRating(Rating rating)
         {
-            _context.Users.Add(user);
+            _context.Ratings.Add(rating);
             await _context.SaveChangesAsync();
 
-            //return CreatedAtAction("GetUser", new { id = user.UserId }, user);
-            return CreatedAtAction(nameof(GetUser), new { id = user.UserId }, user);
+            return CreatedAtAction("GetRating", new { id = rating.RatingId }, rating);
         }
 
-
-
-        // DELETE: api/User/5
+        // DELETE: api/Rating/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(long id)
+        public async Task<IActionResult> DeleteRating(long id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            var rating = await _context.Ratings.FindAsync(id);
+            if (rating == null)
             {
                 return NotFound();
             }
 
-            _context.Users.Remove(user);
+            _context.Ratings.Remove(rating);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool UserExists(long id)
+        private bool RatingExists(long id)
         {
-            return _context.Users.Any(e => e.UserId == id);
+            return _context.Ratings.Any(e => e.RatingId == id);
         }
     }
 }

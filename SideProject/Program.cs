@@ -6,6 +6,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContext<UserContext>(opt =>
     opt.UseInMemoryDatabase("User"));
+builder.Services.AddDbContext<MovieContext>(opt =>
+    opt.UseInMemoryDatabase("Movie"));
+builder.Services.AddDbContext<FavoriteContext>(opt =>
+    opt.UseInMemoryDatabase("Favorite"));
+builder.Services.AddDbContext<RatingContext>(opt =>
+    opt.UseInMemoryDatabase("Rating"));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

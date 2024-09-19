@@ -1,7 +1,9 @@
 namespace SideProject.Models;
-//Movies
+using System.ComponentModel.DataAnnotations;
+////Movies
 public class Movie
 {
+    [Key]
     public long MovieId { get; set; }
     public string? MovieName {get; set; }
     public string? MovieDsc {get; set; }
@@ -14,9 +16,11 @@ public class Movie
 //Ratings
 public class Rating
 {
+    [Key]
     public long RatingId { get; set; }
     public string? UserId { get; set; }
     public long MovieId { get; set; }
+    [Range(0, 6)]
     public int UserRating { get; set; }
 
     public List<User>? Users { get; set; }
