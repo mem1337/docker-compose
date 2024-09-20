@@ -1,28 +1,34 @@
-namespace SideProject.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using Newtonsoft.Json;
+
+namespace SideProject.Models;
+
 ////Movies
 public class Movie
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long MovieId { get; set; }
     public string? MovieName {get; set; }
     public string? MovieDsc {get; set; }
     public int MovieYear { get; set; }
 
-    public List<Favorite>? UserFavorites { get; set; }
-    public List<Rating>? Ratings { get; set; }
+    public ICollection<Favorite>? UserFavorites { get; set;}
+    public ICollection<Rating>? Ratings { get; set; }
 }
 
 //Ratings
 public class Rating
 {
     [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long RatingId { get; set; }
-    public string? UserId { get; set; }
+    //Foreign Keys
+    public long UserId { get; set; }
+    public User? User { get; set; }
     public long MovieId { get; set; }
-    [Range(0, 6)]
-    public int UserRating { get; set; }
+    public Movie? Movie { get; set; }
 
-    public List<User>? Users { get; set; }
-    public List<Movie>? Movies { get; set; }
+    public int UserRating { get; set; }
 }

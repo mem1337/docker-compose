@@ -7,14 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SideProject.Models;
 
-public class UserDto
-{
-    public long UserId { get; set; }
-    public string? Username { get; set; }
-    public string? PasswordHash { get; set; }
-    public Role Role { get; set; }
-}
-
 namespace SideProject.Controllers
 {
     [Route("api/[controller]")]
@@ -36,8 +28,7 @@ namespace SideProject.Controllers
         }
 
         // GET: api/User/5
-        //[HttpGet("{id}")]
-        [HttpGet("api/User/{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(long id)
         {
             var user = await _context.Users.FindAsync(id);
@@ -47,15 +38,7 @@ namespace SideProject.Controllers
                 return NotFound();
             }
 
-            var userDto = new UserDto
-            {
-                UserId = user.UserId,
-                Username = user.Username,
-                PasswordHash = user.PasswordHash,
-                Role = user.Role
-            };
-
-            return Ok(userDto);
+            return user;
         }
 
         // PUT: api/User/5
@@ -91,24 +74,14 @@ namespace SideProject.Controllers
 
         // POST: api/User
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-
-        public class RatingDto
-        {
-            public int MovieId { get; set; }
-            public int Rating { get; set; }
-        }
-
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            //return CreatedAtAction("GetUser", new { id = user.UserId }, user);
-            return CreatedAtAction(nameof(GetUser), new { id = user.UserId }, user);
+            return CreatedAtAction("GetUser", new { id = user.UserId }, user);
         }
-
-
 
         // DELETE: api/User/5
         [HttpDelete("{id}")]
